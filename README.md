@@ -5,3 +5,5 @@ Idea of the website is to suggest roadtrips itineraries to people, matching thei
 
 Built with node.js and mongodb
 
+You can run it locally, by cloning the repository and running : node main.js in your terminal
+
