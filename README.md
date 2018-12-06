@@ -6,6 +6,8 @@ Idea of the website is to suggest roadtrips itineraries to people, matching thei
 Built with node.js and mongodb
 
 Here is a snapshot of the homepage:
+
+
 ![alt text](https://github.com/EulalieFy/justgo/blob/master/snapshot.png)
 
 
