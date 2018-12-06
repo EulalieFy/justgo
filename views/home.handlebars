@@ -1,0 +1,165 @@
+
+      <body>
+           <header>
+                <div class="plan container">
+                  <h1 class="destination-header">Plan your next roadtrip</h1>
+                <form method="post" action="/">
+                       <div class="form-row">
+                          <div class="col">
+                          <label for="Country">Country or continent</label>
+                          <input type="text" name="country" class="form-control" placeholder="Country or continent"  >
+                          </div>
+                          <div class="col">
+                        <label for="days">Number of days</label>
+                        <input type="text"  name="length" class="form-control" placeholder="Days" name="length">                         
+                            </div>
+                        <div class="col input_fields_wrap">                 
+                        <label for="place"> Steps </label>
+                                <div> <input type="text" list="city" class="form-control" placeholder="Places" id="place" name="mytext[]">
+                                 <!--  <datalist id="city">
+                                            {{#each cities}}
+                                                <option value="{{this.name}}">
+                                            {{/each}} --> 
+                                   
+                                    </datalist>
+                                <button class="add_field_button">Add More Fields</button>
+                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+                                <script>$(document).ready(function() {
+                                        var max_fields      = 10; //maximum input boxes allowed
+                                        var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+                                        var add_button      = $(".add_field_button"); //Add button ID
+                                        
+                                        var x = 1; //initlal text box count
+                                        $(add_button).click(function(e){ //on add input button click
+                                            e.preventDefault();
+                                            if(x < max_fields){ //max input box allowed
+                                                x++; //text box increment
+                                                $(wrapper).append('<div><input class="form-control" placeholder="Places" type="text"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+                                            }
+                                        });
+                                        
+                                        $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+                                            e.preventDefault(); $(this).parent('div').remove(); x--;
+                                        })
+                                    });</script>
+                            </div>
+                        </div>
+                      
+                    </div>
+                      <br><br>
+                      <div class="explore">
+                      <input type="submit" value="Explore roadtrips" class="btn-lg" style="background-color:#333; color:white;"></input>
+                    </form>
+                     </div>
+              </header>
+<ul class="cards">
+     {{#each roadtrips}}
+                    <li class="cards__item">
+                      <div class="card">
+                          <div id={{this._id}} style="width: 300px; height: 300px;"></div>
+                            <script>
+                            
+                                var mymap = L.map('{{this._id}}').setView([-12.046374, -77.042793], 5);
+                            
+                                L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+                                    maxZoom: 18,
+                                    id: 'mapbox.streets'
+                                }).addTo(mymap);
+                                L.marker([-12.046374, -77.042793]).addTo(mymap)
+                                    .bindPopup("<b>Lima</b>").openPopup();
+                                L.marker([-16.409047, -71.537451]).addTo(mymap)
+                                    .bindPopup("<b>Arequipa</b>").openPopup();
+                                L.marker([-13.5226400, -71.9673400]).addTo(mymap)
+                                    .bindPopup("<b>Cusco</b>").openPopup();
+                                L.marker([-15.839329976, -70.02083325]).addTo(mymap)
+                                    .bindPopup("<b>Puno</b>").openPopup();
+                                    L.polyline([
+    [-12.046374, -77.042793],
+    [-16.409047, -71.537451]], {color: 'red'}).addTo(mymap);
+L.polyline([
+    [-16.409047, -71.537451],
+    [-13.5226400, -71.9673400]], {color: 'blue'}).addTo(mymap);
+L.polyline([[-13.5226400, -71.9673400],
+    [-15.839329976, -70.02083325]], {color: 'green'}).addTo(mymap);
+                             var searchLayer = L.layerGroup().addTo(map);
+                            //... adding data in searchLayer ...
+                            mymap.addControl( new L.Control.Search({layer: searchLayer}) );
+                            
+                            var legend=L.control({position:'bottomright'});
+                            legend.onAdd=function(mymap){
+                                var div=L.DomUtilcreate('div','legend');
+                                var labels = ['Bus','Train','Plane'];
+                                var colors=['red','blue','green']
+                             return div;}
+                             legend.addTo(mymap);
+                            //searchLayer is a L.LayerGroup contains searched markers
+                            
+                                var popup = L.popup();
+                            
+                              
+                            </script>
+                       
+                        <div class="card__content">
+                          <div class="card__title">{{this.country}}</div>
+                          <p class="card__text">{{this.places}} <br> {{this.total_length}} days</p>
+                         <a href="/{{this._id}}">
+                              <button class="btn btn--block card__btn">Let's see</button>
+                          </a>  
+                      </div>
+                    </li>
+                      {{/each}}
+                    </ul>
+       
+
+
+
+   
+  
+
+
+<div id="mapu"></div>
+    <script>
+
+      function initMap() {
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 6,
+          center: {lat:-12.046374 , lng: -77.042793}
+        });
+
+ 
+        // Create an array of alphabetical characters used to label the markers.
+        var labels = '123456789';
+
+        // Add some markers to the map.
+        // Note: The code uses the JavaScript Array.prototype.map() method to
+        // create an array of markers based on a given "locations" array.
+        // The map() method here has nothing to do with the Google Maps API.
+       var markers = locations.map(function(location, i) {
+          return new google.maps.Marker({
+            position: location,
+            label: labels[i % labels.length]
+          });
+        }); 
+
+        // Add a marker clusterer to manage the markers.
+        var markerCluster = new MarkerClusterer(map, markers,
+         {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    "" }
+      var locations = [
+        {lat: -12.046374, lng: -77.042793},
+        {lat: -16.409047, lng: -71.537451},
+        {lat: -13.5226400, lng: -71.9673400},
+        {lat: -15.839329976, lng: -70.02083325},
+      ]
+
+  
+    </script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuFws-j332EnH6oF2pr7midv4G2KQeMRg&callback=initMap">
+    </script>
+</body>
+   
+

@@ -1,0 +1,110 @@
+
+   
+<link rel="stylesheet" media="screen" type="text/css" href="roadtrip.css"/>
+
+
+<!-- Star Rating Control -->			
+<link href="jplist.start-rating-control.min.css" rel="stylesheet" type="text/css" />
+<script src="jplist.start-rating-control.min.js"></script>
+
+<script>
+$('document').ready(function(){
+   
+   $('#demo').jplist({				
+      itemsBox: '.list' 
+      ,itemPath: '.list-item' 
+      ,panelPath: '.jplist-panel'	
+   });
+   
+});
+</script>
+      
+</head>    
+<body>
+
+    <br>
+  <div class="title_rt">
+        <h1 style="text-align: center; color:#333;" > Roadtrip of {{roadtrips.total_length}} days in {{roadtrips.country}}</h1>
+        <h2 style="text-align: center; color:#333; font-style: italic;"> by {{roadtrips.id_costumer}}</h2>
+  </div>
+ 
+<div class="page">
+    <div class="page__demo">
+        <div class = "container">
+          <div class="row">
+            
+             
+              
+  <div class="col-sm-4">
+
+                  <div  id="mapid"  style="width: 250px;height: 400px; "></div>
+                  <script>
+                  
+                      var mymap = L.map('mapid').setView([-12.046374, -77.042793], 5);
+                  
+                      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+                          maxZoom: 18,
+                          id: 'mapbox.streets'
+                      }).addTo(mymap);
+ L.polyline([
+[-12.046374, -77.042793],
+[-16.409047, -71.537451]], {color: 'red'}).addTo(mymap);
+L.polyline([
+[-16.409047, -71.537451],
+[-13.5226400, -71.9673400]], {color: 'blue'}).addTo(mymap);
+L.polyline([[-13.5226400, -71.9673400],
+[-15.839329976, -70.02083325]], {color: 'green'}).addTo(mymap);
+                      
+                      {{#each roadtrips.stops}}
+                      L.marker({{this.coord}}).addTo(mymap)
+                          .bindPopup("<b>{{this.city}}</b>").openPopup();
+                      {{/each}}
+                         
+                      var popup = L.popup();
+                  </script>
+                  </div>
+        
+             <div class="col-sm-8">
+<div class="timeline">
+        
+    
+            {{#each roadtrips.stops}}
+            <div class="timeline__group">
+            <span class="timeline__year"> {{this.transport}} </span>
+            <div class="timeline__box">
+              <div class="timeline__date">
+                <span class="timeline__month">1</span>
+              </div>
+              <div class="timeline__post">
+                <div class="timeline__content">
+                  <h3> {{this.city}} </h3>
+                  <p> {{this.length}} days </p>
+                   <span class="rating-static rating-{{this.rate}}0"></span>
+                      <div class="star-rating-display" data-rating="{{this.rate}}"><span class="is-vishidden"></span></div>
+                      <img src="images/{{this.mood.[0]}}.png" class="images_moyenne" alt={{this.mood.[0]}}> <img src="images/{{this.mood.[1]}}.png" class="images_moyenne" alt={{this.mood.[1]}}><img src="images/{{this.mood.[2]}}.png" class="images_moyenne" alt={{this.mood.[2]}}>
+</div>
+                </div>
+             </div>
+           
+              {{/each}}</div>
+              </div>
+            </div>
+          </div>
+          <span class="timeline__end">Flight back</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+
+  <script> type="text/javascript" src="roadtrip.js"> </script>
+</body>
+
